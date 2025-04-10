@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:krl/homescreens/homepagemain.dart';
+import 'package:krl/mytask/mytask.dart';
+import 'package:krl/notificationScreen.dart';
+import 'package:krl/profileScreens/profilemain.dart';
+import 'package:krl/utils/colors.dart';
 
 class DashBoard extends StatefulWidget {
   const DashBoard({super.key});
@@ -14,8 +18,9 @@ class _DashBoardState extends State<DashBoard> {
 
   final List<Widget> _pages = [
     HomeScreen(),
-    Center(child: Text('Orders')),
-    Center(child: Text('Profile')),
+    MyTasksScreen(),
+    NotificationScreen(),
+    ProfileScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -46,7 +51,7 @@ class _DashBoardState extends State<DashBoard> {
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: List.generate(3, (index) {
+            children: List.generate(4, (index) {
               IconData icon;
               String label;
 
@@ -56,10 +61,14 @@ class _DashBoardState extends State<DashBoard> {
                   label = "Home";
                   break;
                 case 1:
-                  icon = Icons.receipt_long_outlined;
-                  label = "Orders";
+                  icon = Icons.task;
+                  label = "My Task";
                   break;
                 case 2:
+                  icon = Icons.notification_add_outlined;
+                  label = "Notifications";
+                  break;
+                case 3:
                 default:
                   icon = Icons.person_outline;
                   label = "Profile";
@@ -85,7 +94,10 @@ class _DashBoardState extends State<DashBoard> {
                     children: [
                       Icon(
                         icon,
-                        color: isSelected ? Colors.blue : Colors.grey.shade600,
+                        color:
+                            isSelected
+                                ? AppColors.btntheamColor
+                                : Colors.grey.shade600,
                       ),
                       const SizedBox(height: 4),
                       Text(
@@ -95,7 +107,9 @@ class _DashBoardState extends State<DashBoard> {
                           fontWeight:
                               isSelected ? FontWeight.w600 : FontWeight.w400,
                           color:
-                              isSelected ? Colors.blue : Colors.grey.shade600,
+                              isSelected
+                                  ? AppColors.btntheamColor
+                                  : Colors.grey.shade600,
                         ),
                       ),
                     ],

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:krl/commanwidgets/buttonscomman.dart';
-import 'package:krl/utils/hieghtwidth.dart';
+import 'package:krl/homescreens/bookingscreen/booking.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -14,18 +15,11 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
-        title: Text(
-          "Dashboard",
-          style: GoogleFonts.poppins(
-            color: Colors.black,
-            fontWeight: FontWeight.w600,
-            fontSize: 20,
-          ),
-        ),
+        title: Image.asset('assets/images/logo.png', height: 35, width: 35),
         actions: [
           CircleAvatar(
             backgroundColor: Colors.grey.shade200,
-            child: Icon(Icons.person, color: Colors.black),
+            child: Icon(Icons.notification_add, color: Colors.black),
           ),
           const SizedBox(width: 16),
         ],
@@ -35,48 +29,98 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Consignment Booking",
-              style: GoogleFonts.poppins(
-                color: Colors.black,
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            LayoutBuilder(
-              builder: (context, constraints) {
-                return GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  itemCount: 8,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 4,
-                    crossAxisSpacing: 16,
-                    mainAxisSpacing: 16,
-                    childAspectRatio: 0.85,
-                  ),
-                  itemBuilder: (context, index) {
-                    final items = [
-                      {'icon': LucideIcons.users, 'label': 'Customers'},
-                      {'icon': LucideIcons.package, 'label': 'Parcels'},
-                      {'icon': LucideIcons.truck, 'label': 'Fleet'},
-                      {'icon': LucideIcons.mapPin, 'label': 'Locations'},
-                      {'icon': LucideIcons.settings, 'label': 'Settings'},
-                      {'icon': LucideIcons.barChart3, 'label': 'Analytics'},
-                      {'icon': LucideIcons.wrench, 'label': 'Maintenance'},
-                      {'icon': LucideIcons.userCheck, 'label': 'Staff'},
-                    ];
-
-                    return IconLabelCard(
-                      icon: items[index]['icon'] as IconData,
-                      label: items[index]['label'] as String,
-                    );
+            buildGridSection(
+              title: "Consignment Booking",
+              items: [
+                {
+                  'icon': LucideIcons.clipboardList,
+                  'label': 'Order Booking',
+                  'onTap': () {
+                    Get.to(OrderBookingScreen());
                   },
-                );
-              },
+                },
+                {'icon': LucideIcons.fileText, 'label': 'Consignment Notes'},
+                {'icon': LucideIcons.truck, 'label': 'Freight Bill'},
+              ],
+              crossAxisCount: 3,
+              aspectRatio: 1.1,
             ),
-            15.height,
+
+            buildGridSection(
+              title: "Warehouse",
+              items: [
+                {'icon': LucideIcons.warehouse, 'label': 'Warehouse List'},
+                {'icon': LucideIcons.box, 'label': 'Stock In'},
+              ],
+              crossAxisCount: 3,
+              aspectRatio: 1.2,
+            ),
+
+            buildGridSection(
+              title: "Accounts",
+              items: [
+                {'icon': LucideIcons.receipt, 'label': 'Voucher'},
+                {'icon': LucideIcons.bookOpen, 'label': 'Ledgers'},
+                {'icon': LucideIcons.arrowUpCircle, 'label': 'Acc.Receivable'},
+                {'icon': LucideIcons.arrowDownCircle, 'label': 'Acc.Payable'},
+                {'icon': LucideIcons.trendingUp, 'label': 'Profit/Loss'},
+                {'icon': LucideIcons.scale, 'label': 'Balance/Sheet'},
+                {'icon': LucideIcons.dollarSign, 'label': 'Cash Flow'},
+                {'icon': LucideIcons.activity, 'label': 'Fund Flow'},
+                {'icon': LucideIcons.percent, 'label': 'TDS'},
+                {'icon': LucideIcons.fileBadge, 'label': 'GST'},
+              ],
+              crossAxisCount: 4,
+              aspectRatio: 0.8,
+            ),
+
+            buildGridSection(
+              title: "HR",
+              items: [
+                {'icon': LucideIcons.users, 'label': 'Employees'},
+                {'icon': LucideIcons.userCog, 'label': 'Drivers'},
+                {'icon': LucideIcons.calendarCheck, 'label': 'Attendance'},
+                {'icon': LucideIcons.wallet, 'label': 'Payroll'},
+              ],
+              crossAxisCount: 4,
+              aspectRatio: 0.8,
+            ),
+
+            buildGridSection(
+              title: "Fleet",
+              items: [
+                {'icon': LucideIcons.bus, 'label': 'Vehicles'},
+                {'icon': LucideIcons.wrench, 'label': 'Maintenance'},
+                {'icon': LucideIcons.circleDashed, 'label': 'Tyres'},
+              ],
+              crossAxisCount: 3,
+              aspectRatio: 1.2,
+            ),
+
+            buildGridSection(
+              title: "Master",
+              items: [
+                {'icon': LucideIcons.userCheck, 'label': 'Customer'},
+                {'icon': LucideIcons.hammer, 'label': 'Vendor'},
+              ],
+              crossAxisCount: 3,
+              aspectRatio: 1.2,
+            ),
+
+            buildGridSection(
+              title: "Reports",
+              items: [
+                {'icon': LucideIcons.fileSearch, 'label': 'Order Reports'},
+                {'icon': LucideIcons.fileText, 'label': 'LR Report'},
+                {
+                  'icon': LucideIcons.fileBarChart,
+                  'label': 'Freight Bill Report',
+                },
+              ],
+              crossAxisCount: 3,
+              aspectRatio: 1.2,
+            ),
+
             Wrap(
               spacing: 16,
               runSpacing: 16,

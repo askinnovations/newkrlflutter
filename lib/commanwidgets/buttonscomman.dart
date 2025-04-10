@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:krl/utils/colors.dart';
+import 'package:krl/utils/hieghtwidth.dart';
 
 class CommonNextButton extends StatelessWidget {
   final bool isEnabled;
@@ -30,7 +32,7 @@ class CommonNextButton extends StatelessWidget {
           ),
         ),
         style: ElevatedButton.styleFrom(
-          backgroundColor: Color.fromARGB(255, 236, 13, 121),
+          backgroundColor: AppColors.btntheamColor,
           disabledBackgroundColor: Colors.grey.shade300,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
@@ -125,28 +127,39 @@ class DashboardCard extends StatelessWidget {
 class IconLabelCard extends StatelessWidget {
   final IconData icon;
   final String label;
+  final VoidCallback? onTap;
 
-  const IconLabelCard({required this.icon, required this.label, super.key});
+  const IconLabelCard({
+    required this.icon,
+    required this.label,
+    this.onTap,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          elevation: 3,
-          shadowColor: Colors.black12,
-          child: Container(
-            height: 60,
-            width: 60,
-            decoration: BoxDecoration(
-              color: Colors.white,
+        GestureDetector(
+          onTap: onTap,
+          child: Card(
+            shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
             ),
-            child: Center(child: Icon(icon, size: 28, color: Colors.blue)),
+            elevation: 3,
+            shadowColor: Colors.black12,
+            child: Container(
+              height: 60,
+              width: 60,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Center(
+                child: Icon(icon, size: 28, color: AppColors.btntheamColor),
+              ),
+            ),
           ),
         ),
         const SizedBox(height: 6),
@@ -162,4 +175,45 @@ class IconLabelCard extends StatelessWidget {
       ],
     );
   }
+}
+
+Widget buildGridSection({
+  required String title,
+  required List<Map<String, dynamic>> items,
+  required int crossAxisCount,
+  required double aspectRatio,
+}) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        title,
+        style: GoogleFonts.poppins(
+          color: Colors.black,
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+      10.height,
+      GridView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: items.length,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: crossAxisCount,
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
+          childAspectRatio: aspectRatio,
+        ),
+        itemBuilder: (context, index) {
+          return IconLabelCard(
+            icon: items[index]['icon'],
+            label: items[index]['label'],
+            onTap: items[index]['onTap'],
+          );
+        },
+      ),
+      15.height,
+    ],
+  );
 }

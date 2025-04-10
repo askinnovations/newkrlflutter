@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static const Color btntheamColor = Color(0xFF055B1D);
+  static const Color btntheamColor = Color(0xFFca2639);
   static const Color cardColor = Color(0xFFF3F4F8);
   static const Color textColor = Color(0xFF002140);
   static const Color textgreyColor = Color(0xFF9496A1);

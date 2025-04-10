@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:krl/authscreens/login.dart';
+import 'package:krl/utils/colors.dart';
 
 class OnboardingScreen extends StatefulWidget {
   @override
@@ -97,7 +98,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromARGB(255, 230, 6, 6),
+                        backgroundColor: AppColors.btntheamColor,
                         padding: EdgeInsets.symmetric(
                           vertical: 14,
                           horizontal: screenWidth * 0.3,
@@ -133,7 +134,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       height: 10,
       width: isActive ? 24 : 10,
       decoration: BoxDecoration(
-        color: isActive ? const Color.fromARGB(255, 220, 7, 7) : Colors.black12,
+        color: isActive ? AppColors.btntheamColor : Colors.black12,
         borderRadius: BorderRadius.circular(5),
       ),
     );
