@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:krl/usersideApp/profilescreen/editProfile.dart';
 import 'package:krl/utils/colors.dart';
 
 class ProfileScreen extends StatefulWidget {
