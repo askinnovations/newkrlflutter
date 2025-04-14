@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:krl/authscreens/login.dart';
 import 'package:krl/utils/colors.dart';
@@ -19,9 +20,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   ];
 
   final List<String> _texts = [
-    "Streamline Your Business Workflow\nwith Real-Time Management.",
-    "Monitor Orders, Inventory, and Dispatch\nAll in One Place.",
-    "Start Managing Smarter\nwith Our ERM Platform Today.",
+    "📦 Streamline your business workflow with real-time control and visibility.",
+    "🚛 Monitor orders, inventory, and dispatch — all in one place.",
+    "📈 Start managing smarter with our powerful ERM platform today!",
   ];
 
   @override
@@ -30,98 +31,130 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              flex: 10,
-              child: PageView.builder(
-                controller: _pageController,
-                itemCount: _images.length,
-                onPageChanged: (index) {
-                  setState(() {
-                    _currentPage = index;
-                  });
-                },
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 24),
-                    child: Column(
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFFF4F9FF), Color(0xFFE0F2FF)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: SafeArea(
+          child: Column(
+            children: [
+              // Top image and slider
+              Expanded(
+                flex: 6,
+                child: PageView.builder(
+                  controller: _pageController,
+                  itemCount: _images.length,
+                  onPageChanged: (index) {
+                    setState(() {
+                      _currentPage = index;
+                    });
+                  },
+                  itemBuilder: (context, index) {
+                    return Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Image.asset(
                           _images[index],
-                          height: screenHeight * 0.3,
+                          height: screenHeight * 0.28,
                           fit: BoxFit.contain,
                         ),
-                        SizedBox(height: screenHeight * 0.1),
-                        Text(
-                          _texts[index],
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.poppins(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black87,
-                            height: 1.5,
-                          ),
-                        ),
                       ],
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
-            ),
-            SizedBox(height: 70),
-            Expanded(
-              flex: 2,
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(
-                      _images.length,
-                      (index) => _buildIndicator(index == _currentPage),
-                    ),
-                  ),
-                  SizedBox(height: 30),
-                  AnimatedOpacity(
-                    duration: Duration(milliseconds: 300),
-                    opacity: _currentPage == _texts.length - 1 ? 1.0 : 0.0,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => LoginScreen(),
-                          ),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.btntheamColor,
-                        padding: EdgeInsets.symmetric(
-                          vertical: 14,
-                          horizontal: screenWidth * 0.3,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        elevation: 5,
-                      ),
+
+              Expanded(
+                flex: 3,
+                child: GestureDetector(
+                  onHorizontalDragEnd: (details) {
+                    if (details.primaryVelocity! < 0 &&
+                        _currentPage < _texts.length - 1) {
+                      // Swipe left
+                      _pageController.nextPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                      );
+                    } else if (details.primaryVelocity! > 0 &&
+                        _currentPage > 0) {
+                      // Swipe right
+                      _pageController.previousPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                      );
+                    }
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 300),
                       child: Text(
-                        "Get Started",
+                        _texts[_currentPage],
+                        key: ValueKey(_currentPage),
+                        textAlign: TextAlign.center,
                         style: GoogleFonts.poppins(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black87,
+                          height: 1.6,
                         ),
                       ),
                     ),
                   ),
-                ],
+                ),
               ),
-            ),
-          ],
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                  _images.length,
+                  (index) => _buildIndicator(index == _currentPage),
+                ),
+              ),
+
+              const SizedBox(height: 25),
+
+              // "Get Started" Button
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: ElevatedButton(
+                  onPressed:
+                      _currentPage == _images.length - 1
+                          ? () {
+                            Get.offAll(() => LoginScreen());
+                          }
+                          : null,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        _currentPage == _images.length - 1
+                            ? AppColors.btntheamColor
+                            : Colors.grey[400],
+                    padding: EdgeInsets.symmetric(
+                      vertical: 16,
+                      horizontal: screenWidth * 0.25,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                  ),
+                  child: Text(
+                    "Get Started",
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 30),
+            ],
+          ),
         ),
       ),
     );
@@ -129,13 +162,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   Widget _buildIndicator(bool isActive) {
     return AnimatedContainer(
-      duration: Duration(milliseconds: 300),
-      margin: const EdgeInsets.symmetric(horizontal: 5),
+      duration: const Duration(milliseconds: 300),
+      margin: const EdgeInsets.symmetric(horizontal: 6),
       height: 10,
       width: isActive ? 24 : 10,
       decoration: BoxDecoration(
-        color: isActive ? AppColors.btntheamColor : Colors.black12,
-        borderRadius: BorderRadius.circular(5),
+        color: isActive ? AppColors.btntheamColor : Colors.black26,
+        borderRadius: BorderRadius.circular(12),
       ),
     );
   }

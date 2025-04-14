@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:krl/dashboard.dart';
+import 'package:krl/usersideApp/bottomBar.dart';
 import 'package:krl/utils/colors.dart';
 import 'package:krl/commanwidgets/buttonscomman.dart';
+import 'package:krl/utils/hieghtwidth.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -96,11 +98,20 @@ class _LoginScreenState extends State<LoginScreen> {
                     if (_isButtonEnabled) {
                       print("Email: ${_emailController.text}");
                       print("Password: ${_passwordController.text}");
-                      Get.offAll(DashBoard());
+
+                      Get.offAll(() => DashBoard());
                     }
                   },
                 ),
-                const SizedBox(height: 30),
+                15.height,
+                CommonNextButton(
+                  isEnabled: true,
+                  label: 'User Side Login',
+                  onPressed: () {
+                    Get.offAll(() => UserDashboardScreen());
+                  },
+                ),
+                30.height,
               ],
             ),
           ),
