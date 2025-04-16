@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
+// import 'package:file_picker/file_picker.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:krl/commanwidgets/appbarcomma.dart';
+import 'package:krl/utils/colors.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -16,38 +18,31 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final TextEditingController emailController = TextEditingController();
   String? _imagePath;
 
-  Future<void> _pickImage() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.image, 
-    );
+  // Future<void> _pickImage() async {
+  //   FilePickerResult? result = await FilePicker.platform.pickFiles(
+  //     type: FileType.image,
+  //   );
 
-    if (result != null) {
-      setState(() {
-        _imagePath = result.files.single.path;
-      });
-    }
-  }
+  //   if (result != null) {
+  //     setState(() {
+  //       _imagePath = result.files.single.path;
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Edit Profile',
-          style: GoogleFonts.poppins(fontWeight: FontWeight.w600),
-        ),
-        backgroundColor: Colors.blueAccent,
-        elevation: 1,
-        foregroundColor: Colors.white,
-      ),
+      appBar: CustomAppBar(title: 'Edit Profile'),
+
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            // Profile Image Section
             Center(
               child: GestureDetector(
-                onTap: _pickImage,
+                //onTap: _pickImage,
+                onTap: () {},
                 child: CircleAvatar(
                   radius: 50,
                   backgroundColor: Colors.grey.shade300,
@@ -110,11 +105,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
-                backgroundColor: Colors.blueAccent,
+                backgroundColor: AppColors.btntheamColor,
                 elevation: 2,
               ),
               onPressed: () {
-                // Handle Save Profile functionality here
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text("Profile Updated Successfully")),
                 );

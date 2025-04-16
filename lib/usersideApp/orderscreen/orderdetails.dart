@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:krl/usersideApp/orderscreen/detailsLR.dart';
 import 'package:krl/utils/colors.dart';
 import 'package:krl/utils/hieghtwidth.dart';
 import 'package:krl/utils/snackBar.dart';
@@ -19,8 +20,9 @@ class OrderDetailScreen extends StatefulWidget {
 class _OrderDetailScreenState extends State<OrderDetailScreen> {
   bool showFreightForm = false;
   bool showLRForm = true;
-  int? activeLRIndex;
-  List<int> lrForms = [];
+  List<int> lrForms = [0, 1];
+  int? activeLRIndex = 0;
+
   bool isConsignor = false;
   bool isConsignee = false;
   bool isPaid = false;
@@ -55,6 +57,12 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
   final TextEditingController advanceController = TextEditingController();
   final TextEditingController balanceFreightController =
       TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    lrForms = [0, 1]; // show 2 LR by default
+    activeLRIndex = 0; // if you want L/R 1 expanded initially
+  }
 
   Widget buildCheckbox(String title, bool value, Function(bool?) onChanged) {
     return Row(
@@ -159,6 +167,22 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     }
   }
 
+  Map<String, String> getLrData(int index) {
+    return {
+      "Consignor Name": consigneeController.text,
+      "Address": addressController.text,
+      "GSTIN": gstController.text,
+      "From": fromController.text,
+      "To": toController.text,
+      "Freight": freightController.text,
+      "Hamali": hamaliController.text,
+      "Other Charges": otherChargesController.text,
+      "Total Freight": totalFreightController.text,
+      "Balance Freight": balanceFreightController.text,
+      // Add more fields as needed
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     final order = widget.order;
@@ -195,13 +219,13 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   elevation: 2,
                 ),
                 onPressed: () {
-                  CustomSnackbar.show(
-                    title: "Success",
-                    message: "L/R Request Sent Successfully!",
-                  );
+                  // CustomSnackbar.show(
+                  //   title: "Success",
+                  //   message: "L/R Request Sent Successfully!",
+                  // );
                 },
                 label: Text(
-                  "Send Request L/R",
+                  " L/R",
                   style: GoogleFonts.poppins(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
@@ -222,14 +246,18 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   elevation: 2,
                 ),
                 onPressed: () {
-                  setState(() {
-                    lrForms.add(lrForms.length);
-                    activeLRIndex = lrForms.length - 1;
-                  });
+                  CustomSnackbar.show(
+                    title: "Success",
+                    message: "L/R Request Sent Successfully!",
+                  );
+                  // setState(() {
+                  //   lrForms.add(lrForms.length);
+                  //   activeLRIndex = lrForms.length - 1;
+                  // });
                 },
                 icon: const Icon(Icons.add, size: 20, color: Colors.white),
                 label: Text(
-                  "Add New LR",
+                  "Request LR",
                   style: GoogleFonts.poppins(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
@@ -294,12 +322,154 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                             ],
                           ),
                         ),
+
                         if (activeLRIndex == index)
-                          Column(
-                            children: [
-                              _buildLRForm(),
-                              const SizedBox(height: 12),
-                            ],
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              elevation: 3,
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "KHANDELWAL ROADLINES",
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      "Subject to DEWAS Jurisdiction • AT OWNER’S RISK",
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 12,
+                                        color: Colors.grey[700],
+                                      ),
+                                    ),
+                                    const Divider(thickness: 1.2),
+                                    const SizedBox(height: 8),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            "Consignor: John Doe",
+                                            style: GoogleFonts.poppins(
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            "From: India → To: America",
+                                            style: GoogleFonts.poppins(
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 6),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            "No. of Packages: 10",
+                                            style: GoogleFonts.poppins(),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            "Packing Method: Boxed",
+                                            style: GoogleFonts.poppins(),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 6),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            "Freight: ₹250",
+                                            style: GoogleFonts.poppins(),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            "Total: ₹395",
+                                            style: GoogleFonts.poppins(),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 12),
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: TextButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder:
+                                                  (_) => LRDetailViewScreen(
+                                                    lrData: {
+                                                      "consignorName":
+                                                          "John Doe",
+                                                      "address":
+                                                          "123 Main Street, India",
+                                                      "gstin1":
+                                                          "23AABFM6400F1ZX",
+                                                      "gstin2":
+                                                          "23AABFM6400F1ZX",
+                                                      "noOfPackages": "10",
+                                                      "packingMethod": "Boxed",
+                                                      "descriptions":
+                                                          "Electronic Goods",
+                                                      "actualWeight": "100kg",
+                                                      "chargedWeight": "110kg",
+                                                      "ewayBill": "EWB123456",
+                                                      "validUpto":
+                                                          "20-Apr-2025",
+                                                      "declaredValue": "50000",
+                                                      "lrDate": "14-Apr-2025",
+                                                      "vehicle": "MP09AB1234",
+                                                      "vehicleType": "Truck",
+                                                      "deliveryMode": "By Road",
+                                                      "from": "India",
+                                                      "to": "America",
+                                                      "freightType": "PAID",
+                                                      "freight": "250",
+                                                      "lrCharges": "50",
+                                                      "hamali": "30",
+                                                      "otherCharges": "20",
+                                                      "gst": "45",
+                                                      "totalFreight": "395",
+                                                      "advance": "100",
+                                                      "balanceFreight": "295",
+                                                    },
+                                                  ),
+                                            ),
+                                          );
+                                        },
+                                        child: Text(
+                                          "View More",
+                                          style: GoogleFonts.poppins(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.blue,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
                           ),
                       ],
                     );
@@ -307,6 +477,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 ),
               ],
             ),
+
           const SizedBox(height: 24),
           Text(
             "Billing Summary",
@@ -316,14 +487,8 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
             ),
           ),
           const SizedBox(height: 12),
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                showFreightForm = !showFreightForm;
-              });
-            },
-            child: _buildBillingSummary(),
-          ),
+          _buildBillingSummary(),
+
           if (showFreightForm) _buildFreightForm(),
         ],
       ),
@@ -397,357 +562,62 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     );
   }
 
-  Widget _buildLRForm() {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      elevation: 4,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Column(
-                children: [
-                  Text(
-                    'KHANDELWAL ROADLINES',
-                    style: GoogleFonts.poppins(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.red,
-                    ),
-                  ),
-                  4.height,
-                  Text(
-                    'Subject to DEWAS Jurisdiction',
-                    style: GoogleFonts.poppins(
-                      color: Colors.blue,
-                      fontSize: 12,
-                    ),
-                  ),
-                  Text(
-                    'AT OWNER’S RISK',
-                    style: GoogleFonts.poppins(
-                      color: Colors.orange,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            16.height,
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    "GSTIN for EWAY Bill 23AABFM6400F1ZX",
-                    style: GoogleFonts.poppins(),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text("PAN – AABFM6400F", style: GoogleFonts.poppins()),
-                ),
-              ],
-            ),
-            const Divider(thickness: 1.5),
-            Row(
-              children: [
-                buildCheckbox('Consignor', isConsignor, (val) {
-                  setState(() {
-                    isConsignor = true;
-                    isConsignee = false;
-                    consigneeController.text = "Consignor Name";
-                  });
-                }),
-                buildCheckbox('Consignee', isConsignee, (val) {
-                  setState(() {
-                    isConsignee = true;
-                    isConsignor = false;
-                    consigneeController.text = "Consignee Name";
-                  });
-                }),
-              ],
-            ),
-
-            Text(
-              'We are registered as GTA under sec 9 (3) of GST act 2017... notification No. 13/2017 CTR dated 28/06/2017',
-              style: GoogleFonts.poppins(fontSize: 12),
-            ),
-            const SizedBox(height: 10),
-            Table(
-              border: TableBorder.all(color: Colors.grey.shade300),
-              columnWidths: const {
-                0: FlexColumnWidth(1),
-                1: FlexColumnWidth(1),
-              },
-              children: [
-                tableRow([
-                  TextField(
-                    controller: consigneeController,
-                    decoration: inputDecoration('CONSIGNOR NAME'),
-                  ),
-                  TextField(
-                    controller: addressController,
-                    decoration: inputDecoration('ADDRESS'),
-                  ),
-                ]),
-                tableRow([
-                  TextField(
-                    controller: gstController,
-                    decoration: inputDecoration('GSTIN'),
-                  ),
-                  TextField(
-                    controller: gstController,
-                    decoration: inputDecoration('GSTIN'),
-                  ),
-                ]),
-                tableRow([
-                  TextField(
-                    controller: packagesController,
-                    decoration: inputDecoration('No. of Packages'),
-                  ),
-                  TextField(
-                    controller: packingMethodController,
-                    decoration: inputDecoration('Method of '),
-                  ),
-                ]),
-                tableRow([
-                  TextField(
-                    controller: descriptionController,
-                    decoration: inputDecoration('Descriptions'),
-                  ),
-
-                  Column(
-                    children: [
-                      TextField(
-                        controller: actualWeightController,
-                        decoration: inputDecoration('Actual Weight'),
-                      ),
-                      const SizedBox(height: 8),
-                      TextField(
-                        controller: chargedWeightController,
-                        decoration: inputDecoration('Charged Weight'),
-                      ),
-                    ],
-                  ),
-                ]),
-                tableRow([
-                  TextField(
-                    controller: ewayBillController,
-                    decoration: inputDecoration('E-WAY BILL NO.'),
-                  ),
-                  TextField(
-                    controller: validUptoController,
-                    decoration: inputDecoration('VALID UPTO'),
-                  ),
-                ]),
-                tableRow([
-                  TextField(
-                    controller: declaredValueController,
-                    decoration: inputDecoration('Declared Value Rs.'),
-                  ),
-                  const SizedBox(),
-                ]),
-              ],
-            ),
-            16.height,
-            Table(
-              border: TableBorder.all(color: Colors.grey.shade300),
-              children: [
-                tableRow([
-                  TextField(
-                    controller: lrDateController,
-                    decoration: inputDecoration('L.R. Dated'),
-                  ),
-                  TextField(
-                    controller: vehicleController,
-                    decoration: inputDecoration('Vehicle'),
-                  ),
-                ]),
-                tableRow([
-                  TextField(
-                    controller: vehicleTypeController,
-                    decoration: inputDecoration('Vehicle Type'),
-                  ),
-                  TextField(
-                    controller: deliveryModeController,
-                    decoration: inputDecoration('Delivery Mode'),
-                  ),
-                ]),
-                tableRow([
-                  TextField(
-                    controller: fromController,
-                    decoration: inputDecoration('From'),
-                  ),
-                  TextField(
-                    controller: toController,
-                    decoration: inputDecoration('To'),
-                  ),
-                ]),
-              ],
-            ),
-            const Divider(thickness: 1.5),
-            Row(
-              children: [
-                buildCheckbox(
-                  'PAID',
-                  isPaid,
-                  (val) => setState(() {
-                    isPaid = val!;
-                    if (isPaid) {
-                      isToPay = false;
-                      isToBeBilled = false;
-                    }
-                  }),
-                ),
-                buildCheckbox(
-                  'TO PAY',
-                  isToPay,
-                  (val) => setState(() {
-                    isToPay = val!;
-                    if (isToPay) {
-                      isPaid = false;
-                      isToBeBilled = false;
-                    }
-                  }),
-                ),
-                buildCheckbox(
-                  'TO BE BILLED',
-                  isToBeBilled,
-                  (val) => setState(() {
-                    isToBeBilled = val!;
-                    if (isToBeBilled) {
-                      isPaid = false;
-                      isToPay = false;
-                    }
-                  }),
-                ),
-              ],
-            ),
-
-            Table(
-              border: TableBorder.all(color: Colors.grey.shade300),
-              children: [
-                tableRow([
-                  TextField(
-                    controller: freightController,
-                    decoration: inputDecoration('Freight'),
-                  ),
-                  TextField(
-                    controller: lrChargesController,
-                    decoration: inputDecoration('LR Charges'),
-                  ),
-                ]),
-                tableRow([
-                  TextField(
-                    controller: hamaliController,
-                    decoration: inputDecoration('Hamali'),
-                  ),
-                  TextField(
-                    controller: otherChargesController,
-                    decoration: inputDecoration('Other Charges'),
-                  ),
-                ]),
-                tableRow([
-                  TextField(
-                    controller: gstController,
-                    decoration: inputDecoration('GST'),
-                  ),
-                  TextField(
-                    controller: totalFreightController,
-                    decoration: inputDecoration('Total Freight'),
-                  ),
-                ]),
-                tableRow([
-                  TextField(
-                    controller: advanceController,
-                    decoration: inputDecoration('Less Advance'),
-                  ),
-                  TextField(
-                    controller: balanceFreightController,
-                    decoration: inputDecoration('Balance Freight'),
-                  ),
-                ]),
-              ],
-            ),
-            20.height,
-            Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                'For: KHANDELWAL ROADLINES',
-                style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
-              ),
-            ),
-            12.height,
-            Center(
-              child: ElevatedButton(
-                onPressed: generatePdf,
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 15,
-                    horizontal: 10,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  backgroundColor: AppColors.btntheamColor,
-                  textStyle: GoogleFonts.poppins(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
-                ),
-                child: const Text(
-                  'Generate PDF',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _buildBillingSummary() {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          showFreightForm = !showFreightForm;
-        });
-      },
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12.withOpacity(0.05),
-              blurRadius: 8,
-              offset: const Offset(0, 4),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: AppColors.btntheamColor,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12.withOpacity(0.05),
+                blurRadius: 8,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Text(
+            "Freight Bill",
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
             ),
-          ],
+          ),
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              "Freight Bill Summary",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+
+        ElevatedButton.icon(
+          style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
             ),
-            Icon(
-              showFreightForm
-                  ? Icons.keyboard_arrow_up
-                  : Icons.keyboard_arrow_down,
+            backgroundColor: AppColors.btntheamColor,
+            elevation: 2,
+          ),
+          onPressed: () {
+            setState(() {
+              showFreightForm = !showFreightForm;
+            });
+            CustomSnackbar.show(
+              title: "Success",
+              message: "Freight Request Sent Successfully!",
+            );
+          },
+          icon: const Icon(Icons.add, size: 20, color: Colors.white),
+          label: Text(
+            "Request Freight",
+            style: GoogleFonts.poppins(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: Colors.white,
             ),
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
 

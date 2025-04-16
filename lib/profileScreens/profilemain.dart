@@ -98,6 +98,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       const SizedBox(height: 4),
                       Text(
                         "+91 9876543210",
+                        
                         style: GoogleFonts.poppins(
                           fontSize: 14,
                           color: Colors.grey[600],

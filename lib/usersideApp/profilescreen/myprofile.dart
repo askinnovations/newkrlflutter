@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:krl/usersideApp/passwordchange.dart';
 import 'package:krl/usersideApp/profilescreen/editProfile.dart';
 import 'package:krl/utils/colors.dart';
 // import 'package:image_picker/image_picker.dart';
@@ -117,7 +118,9 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
             buildProfileOption(
               Icons.lock,
               "Change Password",
-              onTapAction: () {},
+              onTapAction: () {
+                Get.to(ChangePasswordScreen());
+              },
             ),
             buildProfileOption(Icons.settings, "Settings", onTapAction: () {}),
             buildProfileOption(
